@@ -1,67 +1,90 @@
 ﻿@model IEnumerable<Tienda.Models.Producto>
-
+@using Tienda.Helpers;
 @{
     ViewBag.Title = "Index";
     String espacioNombre = "Productos";
     String mensaje = "<script>alert('hola');</script>";
 }
 
+
 <h2>Index</h2>
+<div id="contenido-lista">
+    <p>
 
-<p>
-    
-    @Html.ActionLink("Crear Nuevo", "Create", "Producto", htmlAttributes: new {@class="btn btn-primary", data_modal="" })
-</p>
+        @Html.ActionLink("Crear Nuevo", "Create", "Producto", new { }, htmlAttributes: new { @class = "btn btn-primary", data_modal_file = "" })
+    </p>
 
-<span>Se encontraron @(Model.Count()) registros 
-    en @(espacioNombre).Model</span>
+    <span>
+        Se encontraron @(Model.Count()) registros
+        en @(espacioNombre).Model
+    </span>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Categoria.Nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Marca.Nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Costo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Precio)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Categoria.Nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Marca.Nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Costo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Precio)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Categoria.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Marca.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Costo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Imagen)
+            </th>
+            <th></th>
+        </tr>
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Categoria.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Marca.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Costo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Precio)
+                </td>
+                <td>
+                   @if (item.Imagen != null)
+                   {
+                       <img src="/Producto/RegresarImagen/@item.Id" class="img-responsive" alt="Imagen encontrada" style="width:100px; border-color:black; padding:5px" />
+                   }
+                   else
+                   {
+                       <img src = "/Producto/RegresarImagen/0" class="img-responsive"  alt = "Imagen no encontrada" style="width:100px; border-color:black; padding:5px"/>
+                   }
+                </td>
+                <td>
+                    @Html.BootstrapIcon_Button("Editar", "Edit", "Edit", "Producto", btnType: "btn-warning", icon: "fa-pencil",  routeValues: new { id = item.Id }, htmlAtributes: new { data_modal_file = "" })
+                    @Html.BootstrapIcon_Button("Detalle", "Detalle", "Details", "Producto", btnType: "btn-primary", icon: "glyphicon-eye-open", routeValues: new { id = item.Id })
+                    @Html.BootstrapIcon_Button("Borrar", "Borrar", "Delete", "Producto", btnType: "btn-danger",  routeValues: new { id = item.Id })
+
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+
 <p>Consultas escribir a 
     <a href="mailto:jwgarcia003@gmail.com">jwgarcia003@@gmail.com</a>
 </p>
@@ -85,5 +108,16 @@
 </div>
 
 @section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/script-custom-validator.js"></script>
     <script src="~/Scripts/ModalForm.js"></script>
+    <script>
+    function readURL(e) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            $('#image').attr('src', reader.result);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    }
+    </script>
 }

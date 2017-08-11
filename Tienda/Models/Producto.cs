@@ -14,6 +14,14 @@ namespace Tienda.Models
         public float Costo { get; set; }
 
         public float Precio { get; set; }
+
+        [DataType(DataType.ImageUrl)]
+        public byte[] Imagen { get; set; }
+
+
+        public string ImageURL { get; set; }
+
+        #region FOREINGKEYS
         [Display(Name ="Categoria")]
         public int categoriaid { get;  set;}
 
@@ -25,6 +33,7 @@ namespace Tienda.Models
 
         [ForeignKey("marcaid")]
         public virtual Marca Marca { get; set; }
+        #endregion
 
     }
 }
